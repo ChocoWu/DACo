@@ -1,6 +1,8 @@
-# DACo: Global Commander and Local Operative: A Dual-Agent Framework for Scene Navigation
+# DACo
 [![arXiv](https://img.shields.io/badge/arXiv-2602.xxxxx-b31b1b.svg)]()
 ![License](https://img.shields.io/badge/License-MIT-blue)
+
+Official Repository for the paper: **Global Commander and Local Operative: A Dual-Agent Framework for Scene Navigation**
 
 [Kaiming Jin](https://github.com/goldenkm), [Yuefan Wu](https://ivenwu.com/), [Shengqiong Wu](https://sqwu.top/)\*, [Hao Fei](https://haofei.vip/), [Bobo Li](https://www.libobo.site/), [Shuicheng Yan](https://yanshuicheng.info/) and [Tat-seng Chua](https://www.chuatatseng.com/). (*Correspondence)
 
