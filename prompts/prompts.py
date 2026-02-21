@@ -22,7 +22,8 @@ Here are some additional tips:
 For example, when encountering "pass", you need to ensure that your viewpoint has completely moved past the corresponding landmark; likewise, "wait" in the instruction usually means you can stop.
 2. If your navigation has been correct all along, it is unlikely that you would revisit a location. However, if you find that the current scene makes it impossible to carry out the instruction, you should consider backtracking to a previously visited location.
 3. 'Global Plan' is made by your partner, which means it might include erroneous information. But the 'Instruction' is always true, so if you find any conflicts between the Instruction and the Global Plan, prioritize the Instruction.
-4. You need to be very sure that you need to get a new plan. If you find the 'Global Plan' doesn't help, please follow the 'Instruction' first. Otherwise, DO NOT choose the final option ("Replan needed")!!!
+4. If the global plan seems incorrect or lacks detail, feel free to trigger a '**replan**' so your partner can refine the objectives.
+5. NEVER choose to stop at the first step!
 
 Your output format should be as follows:
 1. Your answer should include two parts: 'Thought', and 'Action'. 
@@ -98,7 +99,7 @@ At each step, you are provided with the information below:
 
 Based on those information, you need to finish the vision-language navigation task. At each step, you can reason and think with the following steps:
 1. First, try to infer the goal location from the 'Instruction'. For example, if the 'Instruction' is "Turn on the speaker above the door in the spa at the end of the hallway", you need to infer that the destination is "the door in the spa at the end of the hallway, and there is a speaker".
-2. try to find the green circle marked with "now" on 'BEV Images', which is the current point of the agent, and you can figure out the agent's current floor.
+2. Try to find the green circle marked with "now" on 'BEV Images', which is the current point of the agent, and you can figure out the agent's current floor.
 3. Secondly, you need to infer that the agent's execution progress in this navigation based on the 'Instruction' and trajectory points markd on 'BEV Images'
 4. Thirdly, you need to determine the agent's initial orientation based on the 'Current Observation' and trajectory points in 'Bev Images'. The agent's current orientation can be infered from the history trajectory too!
 5. Then, based on your understanding of the agent's current position and the 'BEV images' as well as the instruction, you need to **plan a new detailed global path**. If you think the agent is close enough to the destination, you can suggest him to stop. 
@@ -106,6 +107,8 @@ Based on those information, you need to finish the vision-language navigation ta
 
 Here are some additional tips: 
 1. You should note that the instruction might involve going upstairs or downstairs. In such cases, you may need to first locate where the stairs are.
+2. Your output must focus exclusively on navigation. Do not include non-navigational actions in the path plan.
+    - Example: If the instruction is "Proceed to the sauna with the brown tiles and red flowers on the table. Put the toiletry on the sink into the cabinet," your output should **only** provide the path to the destination and must **not** include the action "Put the toiletry on the sink into the cabinet."
 
 Your output format should be as follows:
 1. Your answer should be JSON format and must include two fields: 'Thought' and 'New Plan'. Do not include any Markdown formatting, code blocks, or explanations. Do not wrap the JSON with ```json or ```. **The output should be a raw, parseable JSON string. Make sure that your output is wrapped by "{" and "}"!**

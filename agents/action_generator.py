@@ -79,23 +79,31 @@ class ActionGenerator(object):
         
         target = self.partner.get_target(ob)
 
+        # static plan
+        if self.args.global_style == 'static':
+            plan = self.partner.global_plan(ob, traj['path'], 0)
+
         replan_cnt = 0
         for step in range(self.args.max_action_len):
-            
+            print("=" * 20, f"Step {step}", "=" * 20)
             # dynamic plan
-            plan = self.partner.global_plan(ob, traj['path'], step)
-
-            print('-------- Current Plan --------')
-            print(plan)
+            if self.args.global_style == 'dynamic':
+                plan = self.partner.global_plan(ob, traj['path'], step)            
         
 
             sys_prompt, user_prompt_text, user_prompt_img, action_options = self.prompt_manager.get_prompts(plan, ob, step)
                 
             print('-------- Local Action Prompts --------')
             print(user_prompt_text)
-            # print(user_prompt_img)
     
-            nav_output = call_2D_llm(sys_prompt, user_prompt_text, user_prompt_img, model=self.args.llm)
+            nav_output = call_2D_llm(
+                system=sys_prompt, 
+                prompt=user_prompt_text, 
+                image_dict=user_prompt_img, 
+                model=self.args.llm, 
+                out_dir=self.args.output_dir, 
+                instr_id=self.args.instr_id
+            )
             
             print('-------- Local Output --------')
             print(nav_output)
@@ -109,8 +117,15 @@ class ActionGenerator(object):
                 sys_prompt, user_prompt_text, user_prompt_img, action_options = self.prompt_manager.get_prompts(plan, ob, step)
                 print('-------- Local Replan Action Prompts --------')
                 print(user_prompt_text)
-                nav_output = call_2D_llm(sys_prompt, user_prompt_text, user_prompt_img, model=self.args.llm)
-                print('-------- Local Replan Output --------')
+                nav_output = call_2D_llm(
+                    system=sys_prompt, 
+                    prompt=user_prompt_text, 
+                    image_dict=user_prompt_img, 
+                    model=self.args.llm, 
+                    out_dir=self.args.output_dir, 
+                    instr_id=self.args.instr_id
+                )
+                print('-------- Replan Output --------')
                 print(nav_output)
                 action = self.prompt_manager.parse_action(nav_output=nav_output, ob=ob)     
             if action < -1:
@@ -128,9 +143,9 @@ class ActionGenerator(object):
             if action != -1:
                 ob = self.env._get_obs()[0]    
             else:
-                return {'status': 'success', 'traj': traj}     
+                return {'status': 'success', 'traj': traj, 'replanned': replan_cnt > 0}     
             
-        return {'status': 'fail', 'traj': traj}  
+        return {'status': 'fail', 'traj': traj, 'replanned': replan_cnt > 0}  
 
     def test(self):
         ### initialize the environment
@@ -141,7 +156,7 @@ class ActionGenerator(object):
 
         message_2D = self.navigation(init_ob=init_ob)
 
-        return message_2D['traj']
+        return message_2D
 
 
 

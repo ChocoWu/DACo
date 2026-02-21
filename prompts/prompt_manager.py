@@ -176,7 +176,7 @@ class PromptManager3D(PromptManagerBase):
     def get_prompts(self, ob, cur_loc, traj, step, target):
         is_first = target is None
         if is_first:
-            if self.args.dataset == 'r2r':
+            if self.args.dataset != 'reverie':
                 sys_prompt = SYS_PROMPT_3D 
             else:
                 sys_prompt = SYS_PROMPT_3D_REVERIE

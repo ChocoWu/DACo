@@ -5,6 +5,7 @@ import argparse
 def parse_args():
     parser = argparse.ArgumentParser(description="")
 
+    # Data preparation
     parser.add_argument('--data_dir', type=str, default='datasets')
     parser.add_argument('--dataset', type=str, default='r2r')
     parser.add_argument('--output_dir', type=str, default='default', help='experiment id')
@@ -14,7 +15,7 @@ def parse_args():
     parser.add_argument('--traj_img_dir', type=str, default=None)
     parser.add_argument('--num_workers', type=int, default=4, help='for parallel evaluation')
 
-    # Data preparation
+    
     parser.add_argument('--max_instr_len', type=int, default=200)
     parser.add_argument('--max_action_len', type=int, default=15, help='max attempts of 2D-LLM')
     parser.add_argument('--max_re_plan', type=int, default=1, help='max request count of re-plan to 3D-LLM')
@@ -23,6 +24,7 @@ def parse_args():
     parser.add_argument("--split", type=str, default='MapGPT_72_scenes_processed')
     parser.add_argument('--start', type=int, default=0)
     parser.add_argument('--end', type=int, default=None)
+    parser.add_argument('--global_style', type=str, default='dynamic')
 
     # LLM
     parser.add_argument('--llm', type=str, default='', help='path to llm')
@@ -45,14 +47,12 @@ def postprocess_args(args):
         args.anno_dir = os.path.join(DATA_DIR, 'R2R', 'annotations')
     elif args.dataset == 'reverie':
         args.anno_dir = os.path.join(DATA_DIR, 'REVERIE', 'annotations')
+    elif args.dataset == 'r4r':
+        args.anno_dir = os.path.join(DATA_DIR, 'R4R', 'annotations')
 
 
     # Build paths
     args.log_dir = os.path.join(args.output_dir, 'logs')
     args.pred_dir = os.path.join(args.output_dir, 'preds')
-
-    os.makedirs(args.output_dir, exist_ok=True)
-    os.makedirs(args.log_dir, exist_ok=True)
-    os.makedirs(args.pred_dir, exist_ok=True)
 
     return args

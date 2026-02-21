@@ -1,6 +1,8 @@
 from openai import OpenAI
 import os
 import base64
+import json  
+import time  
 from tenacity import (
     retry,
     stop_after_attempt,
@@ -8,8 +10,9 @@ from tenacity import (
 )  # for exponential backoff
 
 
+
 generation_key = os.getenv("API_KEY")
-base_url = os.getenv("BASE_URL")
+base_url = os.getenv("BASE_URL")    # e.g. http://127.0.0.1:8000/v1
 
 if generation_key is not None:
     client = OpenAI(
@@ -18,7 +21,7 @@ if generation_key is not None:
 elif base_url is not None:      # call local model
     client = OpenAI(
         api_key="xxx",
-        base_url=base_url     # call qwen2.5-vl
+        base_url=base_url
     )
 else:
     raise ValueError("Neither API key not base url is found. Please set the API_KEY or BASE_URL environment variable.")
@@ -28,7 +31,7 @@ def completion_with_backoff(**kwargs):
     return client.chat.completions.create(**kwargs)
 
 
-def call_2D_llm(system, prompt, image_dict, model="gpt-4o-2024-11-20", max_tokens=1000):
+def call_2D_llm(system, prompt, image_dict, model="gpt-4o-2024-11-20", max_tokens=1000, out_dir=None, instr_id=None):
     user_content = []
 
     # prepare user messages
@@ -68,8 +71,33 @@ def call_2D_llm(system, prompt, image_dict, model="gpt-4o-2024-11-20", max_token
         }
     ]
 
+    start_time = time.time()
+    
     chat_message = completion_with_backoff(model=model, messages=messages, temperature=0, max_tokens=max_tokens, seed=42)
-
     answer = chat_message.choices[0].message.content
+    
+    end_time = time.time()
+    latency = end_time - start_time 
+
+    # ------------------ calculate token usage ------------------
+    if chat_message.usage:
+        usage_data = {
+            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "model": model,
+            "prompt_tokens": chat_message.usage.prompt_tokens,
+            "completion_tokens": chat_message.usage.completion_tokens,
+            "total_tokens": chat_message.usage.total_tokens,
+            "latency_seconds": round(latency, 3),   
+        }
+
+        if out_dir and instr_id:
+            try:
+                os.makedirs(out_dir, exist_ok=True)
+                log_file = os.path.join(out_dir, f"logs/api_usage_log_{instr_id}.jsonl")
+                
+                with open(log_file, "a", encoding="utf-8") as f:
+                    f.write(json.dumps(usage_data, ensure_ascii=False) + "\n")
+            except Exception as e:
+                print(f"Error logging API usage: {e}")
 
     return answer

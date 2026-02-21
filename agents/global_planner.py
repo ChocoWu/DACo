@@ -13,7 +13,14 @@ class GlobalPlanner(object):
         
     def get_cur_loc_desc(self, ob):
         sys_prompt, user_prompt_text, user_prompt_img = self.prompt_manager.get_cur_loc_prompt(ob)
-        return call_2D_llm(system=sys_prompt, prompt=user_prompt_text, image_dict=user_prompt_img, model=self.args.llm)
+        return call_2D_llm(
+            system=sys_prompt, 
+            prompt=user_prompt_text, 
+            image_dict=user_prompt_img, 
+            model=self.args.llm, 
+            out_dir=self.args.output_dir, 
+            instr_id=self.args.instr_id
+        )
 
     def global_plan(self, ob, traj, step, target=None):
         cur_loc = self.get_cur_loc_desc(ob)
@@ -22,12 +29,17 @@ class GlobalPlanner(object):
 
         print('-------- Current Location Desc --------')
         print(cur_loc)
-        
+    
 
-        # print('-------- Global Prompt --------')
-        # print(user_prompt_text)
+        global_plan_output = call_2D_llm(
+            system=sys_prompt, 
+            prompt=user_prompt_text, 
+            image_dict=user_prompt_img, 
+            model=self.args.llm, 
+            out_dir=self.args.output_dir, 
+            instr_id=self.args.instr_id
+        )
 
-        global_plan_output = call_2D_llm(sys_prompt, user_prompt_text, user_prompt_img, model=self.args.llm)
         message = self.prompt_manager.parse_action(global_plan_output)
         plan = message['data']
         if not message['success']:
@@ -41,7 +53,14 @@ class GlobalPlanner(object):
     
     def get_target(self, ob):
         sys_prompt, user_prompt_text, user_prompt_img = self.prompt_manager.get_tar_loc_prompts(ob)
-        tar_loc = call_2D_llm(system=sys_prompt, prompt=user_prompt_text, image_dict=user_prompt_img, model=self.args.llm)
+        tar_loc = call_2D_llm(
+            system=sys_prompt, 
+            prompt=user_prompt_text, 
+            image_dict=user_prompt_img, 
+            model=self.args.llm, 
+            out_dir=self.args.output_dir, 
+            instr_id=self.args.instr_id
+        )
         # print(tar_loc)
         tar_loc = json.loads(tar_loc)['Answer']
         return tar_loc
