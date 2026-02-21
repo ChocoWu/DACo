@@ -2,7 +2,7 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2602.xxxxx-b31b1b.svg)]()
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
-[Kaiming Jin](https://github.com/goldenkm), [Yuefan Wu](https://ivenwu.com/), [Shengqiong Wu*](https://sqwu.top/), [Hao Fei](https://haofei.vip/), [Bobo Li](https://www.libobo.site/), [Shuicheng Yan](https://yanshuicheng.info/) and [Tat-seng Chua](https://www.chuatatseng.com/). (*Correspondence)
+[Kaiming Jin](https://github.com/goldenkm), [Yuefan Wu](https://ivenwu.com/), [Shengqiong Wu](https://sqwu.top/)\*, [Hao Fei](https://haofei.vip/), [Bobo Li](https://www.libobo.site/), [Shuicheng Yan](https://yanshuicheng.info/) and [Tat-seng Chua](https://www.chuatatseng.com/). (*Correspondence)
 
 National University, Simon Fraser University, University of Oxford
 
@@ -16,13 +16,14 @@ National University, Simon Fraser University, University of Oxford
 * [🗞️ Citation](#🗞️-citation)
 
 ## 📬 News
-* [2026-02-22] 🎉 We have released the initial version of our paper!
+* [2026-02-xx] 🎉 We have released the initial version of our paper!
 * [2026-02-21] 🎉 We have released our code and dataset used in the paper!
 
 ## 💡 Overview
 * We propose **DACo**, a novel role-specialized dual-agent architecture that structurally decomposes global planning and local execution for LVLM-based navigation. The overview framework is shown in the figure below:
 ![](assets/method.png)
-* We introduce dynamic subgoal planning and adaptive replanning mechanisms that enhance stability and interpretability in long-horizon navigation. As illustrated in the following figure, these two mechanisms enhance the self-correcting capability of DACo.
+* We introduce **dynamic planning** and **adaptive replanning** mechanisms that enhance stability and interpretability in long-horizon navigation. As illustrated in the following figure,  Rather than operating in isolation, the agents continuously **supervise** and **refine** each other through iterative information exchange
+and coordinated decision making.
 ![](assets/self_correcting.png)
 * We conduct extensive evaluations across multiple benchmarks and backbones, demonstrating consistent and significant zero-shot improvements.
 
