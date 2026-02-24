@@ -83,7 +83,8 @@ Remember to customize the arguments before run the code:
 You may refer to related work that serves as foundations for our framework and code repository, [MapGPT](https://github.com/chen-judge/MapGPT), [DiscussNav](https://github.com/LYX0501/DiscussNav), [NavGPT](https://github.com/GengzeZhou/NavGPT), [VLN-DUET](https://github.com/cshizhe/VLN-DUET) and [Matterport3D](https://github.com/peteanderson80/Matterport3DSimulator). Thanks for their wonderful works!
 
 ## 🗞️ Citation
-> @misc{jin2026globalcommanderlocaloperative,
+```
+@misc{jin2026globalcommanderlocaloperative,
       title={Global Commander and Local Operative: A Dual-Agent Framework for Scene Navigation}, 
       author={Kaiming Jin and Yuefan Wu and Shengqiong Wu and Bobo Li and Shuicheng Yan and Tat-Seng Chua},
       year={2026},
@@ -92,4 +93,5 @@ You may refer to related work that serves as foundations for our framework and c
       primaryClass={cs.CV},
       url={https://arxiv.org/abs/2602.18941}, 
 }
+```
 
